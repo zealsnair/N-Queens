@@ -1,21 +1,15 @@
 #include <bits/stdc++.h>
+using namespace std;
 
 // TC = O(n!);
 // SC = O(n*n)
 
 // adding board values to our final answer
-void addAnswer(vector<vector<int>> &board, vector<vector<int>> &ans, int n) {
-	vector<int> temp;
-
-	for (int i=0; i<n; i++) {
-		for (int j=0; j<n; j++) {
-			temp.push_back(board[i][j]);
-		}
-	}
-	ans.push_back(temp);
+void addAnswer(vector<vector<int>> &board, vector<vector<vector<int>>> &ans, int n) {
+	ans.push_back(board);
 }
 
-// fucntion to find whether the placing queen in next column is safe or not
+// function to find whether placing queen in next column is safe or not
 bool isSafe(int row, int col, vector<vector<int>> &board, int n) {
 	int x = row;
 	int y = col;
@@ -27,8 +21,6 @@ bool isSafe(int row, int col, vector<vector<int>> &board, int n) {
 		}
 		y--;
 	}
-
-	// checking for column is not required because we already placing one queen in one column only
 
 	// checking for upper diagonal
 	x = row;
@@ -55,12 +47,12 @@ bool isSafe(int row, int col, vector<vector<int>> &board, int n) {
 	return true;
 }
 
-// fucntion to find the possible solution to place n queens
-void solve(int col, vector<vector<int>> &board, vector<vector<int>> &ans, int n) {
+// function to find the possible solution to place n queens
+void solve(int col, vector<vector<int>> &board, vector<vector<vector<int>>> &ans, int n) {
 	// base case
 	if (col == n) {
 		addAnswer(board, ans, n);
-		return ;
+		return;
 	}
 
 	for (int row=0; row<n; row++) {
@@ -72,10 +64,32 @@ void solve(int col, vector<vector<int>> &board, vector<vector<int>> &ans, int n)
 	}
 }
 
-vector<vector<int>> nQueens(int n) {
-	// Write your code here
+vector<vector<vector<int>>> nQueens(int n) {
 	vector<vector<int>> board(n, vector<int> (n, 0));
-	vector<vector<int>> ans;
+	vector<vector<vector<int>>> ans;
 	solve(0, board, ans, n);
 	return ans;
+}
+
+// Function to print the board
+void printBoards(const vector<vector<vector<int>>> &solutions) {
+	for (const auto &board : solutions) {
+		for (const auto &row : board) {
+			for (int cell : row) {
+				cout << (cell ? "Q " : ". ");
+			}
+			cout << endl;
+		}
+		cout << "\n";
+	}
+}
+
+int main() {
+	int n;
+	cout << "Enter the value of N: ";
+	cin >> n;
+	vector<vector<vector<int>>> solutions = nQueens(n);
+	cout << "Total solutions: " << solutions.size() << "\n\n";
+	printBoards(solutions);
+	return 0;
 }
